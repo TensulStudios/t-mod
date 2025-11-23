@@ -243,101 +243,7 @@ namespace TABMM
     public class MapDescriptor : MonoBehaviour
     {
         public string mapName = DateTime.Now.ToString("yyyyMMddHHmmss");
-
-        string url = "https://pastebin.com/raw/fZv70RJ7";
-
-        public IEnumerator GetTextFromURL(string url)
-        {
-            UnityWebRequest www = new UnityWebRequest(url);
-            yield return www;
-
-            if (string.IsNullOrEmpty(www.error))
-            {
-                string text = www.result.ToString();
-                mesh = LoadOBJFromString(text);
-            }
-        }
-
-        Mesh mesh;
-
-        public void OnDrawGizmos()
-        {
-            if (mesh == null)
-            {
-                StartCoroutine(GetTextFromURL(url));
-            }
-            transform.position = Vector3.zero;
-            transform.eulerAngles = Vector3.zero;
-            transform.localScale = Vector3.zero;
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireMesh(mesh);
-        }
-
-        public Mesh LoadOBJFromString(string objContent)
-        {
-            List<Vector3> vertices = new List<Vector3>();
-            List<Vector3> normals = new List<Vector3>();
-            List<Vector2> uv = new List<Vector2>();
-            List<int> triangles = new List<int>();
-
-            Mesh mesh = new Mesh();
-
-            using (StringReader reader = new StringReader(objContent))
-            {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    if (line.StartsWith("v "))
-                    {
-                        string[] split = line.Split(' ');
-                        vertices.Add(new Vector3(
-                            float.Parse(split[1]),
-                            float.Parse(split[2]),
-                            float.Parse(split[3])
-                        ));
-                    }
-                    else if (line.StartsWith("vn "))
-                    {
-                        string[] split = line.Split(' ');
-                        normals.Add(new Vector3(
-                            float.Parse(split[1]),
-                            float.Parse(split[2]),
-                            float.Parse(split[3])
-                        ));
-                    }
-                    else if (line.StartsWith("vt "))
-                    {
-                        string[] split = line.Split(' ');
-                        uv.Add(new Vector2(
-                            float.Parse(split[1]),
-                            float.Parse(split[2])
-                        ));
-                    }
-                    else if (line.StartsWith("f "))
-                    {
-                        string[] split = line.Split(' ');
-                        for (int i = 1; i < split.Length; i++)
-                        {
-                            string[] components = split[i].Split('/');
-                            triangles.Add(int.Parse(components[0]) - 1);
-                        }
-                    }
-                }
-            }
-
-            mesh.vertices = vertices.ToArray();
-            if (normals.Count == vertices.Count)
-                mesh.normals = normals.ToArray();
-            if (uv.Count == vertices.Count)
-                mesh.uv = uv.ToArray();
-            mesh.triangles = triangles.ToArray();
-
-            mesh.RecalculateBounds();
-            mesh.RecalculateNormals();
-
-            return mesh;
-        }
-
+		
         void SaveScripts(string modOutputDir)
         {
             var scene = EditorSceneManager.GetActiveScene();
@@ -806,3 +712,4 @@ namespace TABMM
 }
 
 #endif
+
