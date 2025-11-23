@@ -450,7 +450,6 @@ namespace TABMM
             {
                 string assetPath = AssetDatabase.GetAssetPath(shader);
 
-                // Skip built-in Unity shaders
                 if (string.IsNullOrEmpty(assetPath) || assetPath.StartsWith("Resources/unity_builtin_extra"))
                 {
                     Debug.Log($"Skipping built-in shader: {shader.name}");
@@ -463,7 +462,6 @@ namespace TABMM
                 string fileName = shaderName + extension;
                 string shaderPath = Path.Combine(shadersDir, fileName);
 
-                // For Shader Graph, we need to save the .shadergraph file
                 if (isShaderGraph)
                 {
                     if (File.Exists(assetPath))
@@ -485,7 +483,7 @@ namespace TABMM
                         Debug.LogWarning($"Could not find Shader Graph file for: {shader.name}");
                     }
                 }
-                // For regular shaders, save the .shader file
+				
                 else if (File.Exists(assetPath))
                 {
                     string shaderContent = File.ReadAllText(assetPath);
@@ -505,7 +503,6 @@ namespace TABMM
                     Debug.LogWarning($"Could not find shader file for: {shader.name}");
                 }
 
-                // Also save material properties for Shader Graph shaders
                 if (isShaderGraph && shaderToMaterial.ContainsKey(shader))
                 {
                     Material mat = shaderToMaterial[shader];
@@ -528,7 +525,6 @@ namespace TABMM
             propData.shaderName = material.shader.name;
             propData.properties = new List<MaterialProperty>();
 
-            // Get shader properties
             Shader shader = material.shader;
             int propertyCount = ShaderUtil.GetPropertyCount(shader);
 
@@ -808,4 +804,5 @@ namespace TABMM
         }
     }
 }
+
 #endif
