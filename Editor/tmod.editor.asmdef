@@ -1,0 +1,16 @@
+{
+    "name": "tmod.editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:c9ce8c5fd24c80042aff23976f820863"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

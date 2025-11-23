@@ -1,0 +1,19 @@
+{
+  "name": "com.temporarystudios.tmod",
+  "version": "1.0.1",
+  "displayName": "tMod",
+  "description": "tMOD is a mod manager that handles scripts, shaders and asset bundle compilation.",
+  "unity": "2019.1",
+  "unityRelease": "0b5",
+  "keywords": [
+    "mod",
+    "manager",
+    "tabmm"
+  ],
+  "author": {
+    "name": "Temporary Studios",
+    "email": "contact@temporarystudios.org",
+    "url": "https://temporarystudios.org"
+  },
+  "type": "tool"
+}
