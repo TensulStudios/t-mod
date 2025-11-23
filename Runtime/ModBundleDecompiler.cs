@@ -9,9 +9,6 @@ using UnityEngine;
 
 namespace TABMM
 {
-    /// <summary>
-    /// Stop the compiler from compiling this class into the mod.
-    /// </summary>
     public class ExcludeCompilationAttribute : Attribute
     {
 
@@ -137,10 +134,6 @@ namespace TABMM
 
                 string scriptCode = File.ReadAllText(scriptPath);
                 Debug.Log($"Found script: {scriptData.scriptName}");
-                
-                // Note: Runtime script compilation is complex and platform-dependent
-                // You might need a runtime compilation solution or pre-compile scripts into assemblies
-                // For Android builds, you'll need to include compiled DLLs instead
             }
 
             yield return null;
@@ -188,17 +181,14 @@ namespace TABMM
 
             foreach (var rendererData in data.renderers)
             {
-                // Strip the root object name from the path since it changes when loaded as a mod
                 string[] pathParts = rendererData.objectPath.Split('/');
 
-                // Skip the first part (original root object name) and search from parent
                 string relPath = pathParts.Length > 1 ?
                     string.Join("/", pathParts, 1, pathParts.Length - 1) :
                     pathParts[0];
 
                 Transform found = FindChildRecursive(parent, relPath);
 
-                // If not found with relative path, try searching by the object name alone
                 if (found == null)
                 {
                     string objectName = pathParts[pathParts.Length - 1];
@@ -253,7 +243,6 @@ namespace TABMM
                         material.shader = loadedShaders[shaderName];
                         Debug.Log($"Applied custom shader {shaderName} to material {material.name}");
                         
-                        // Apply saved properties if available (for Shader Graph)
                         if (shaderProperties.ContainsKey(shaderName))
                         {
                             ApplyMaterialProperties(material, shaderProperties[shaderName]);
@@ -298,8 +287,6 @@ namespace TABMM
                             material.SetFloat(prop.name, prop.floatValue);
                             break;
                         case "TexEnv":
-                            // Texture references need to be handled separately
-                            // as they require the texture to be loaded
                             if (prop.textureOffset != null && prop.textureOffset.Length == 2)
                             {
                                 material.SetTextureOffset(prop.name, new Vector2(
@@ -456,15 +443,6 @@ namespace TABMM
                                 "File",
                                 "FileStream"
                             };
-                            // Replace this section in your LoadBundle method:
-                            // FROM:
-                            //     foreach (var sc in obj.GetComponentsInChildren<MonoBehaviour>())
-                            //     {
-                            //         if (sc.GetType().GetCustomAttributes(typeof(ExcludeCompilationAttribute), true).Length > 0)
-                            //             DestroyImmediate(sc);
-                            //     }
-                            //
-                            // TO:
 
                             foreach (var sc in obj.GetComponentsInChildren<MonoBehaviour>())
                             {
@@ -476,14 +454,12 @@ namespace TABMM
 
                                 bool shouldRemove = false;
 
-                                // Check for ExcludeCompilation attribute (your original check)
                                 if (componentType.GetCustomAttributes(typeof(ExcludeCompilationAttribute), true).Length > 0)
                                 {
                                     Debug.LogWarning($"Removing component with ExcludeCompilation: {typeName}");
                                     shouldRemove = true;
                                 }
 
-                                // Check for dangerous namespaces
                                 if (!shouldRemove && !string.IsNullOrEmpty(namespaceName))
                                 {
                                     string[] disallowedNamespaces = new string[]
@@ -677,4 +653,5 @@ public class MaterialPropertyData
     public string materialName;
     public string shaderName;
     public List<MaterialProperty> properties;
+
 }
